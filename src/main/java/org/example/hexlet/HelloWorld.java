@@ -17,17 +17,17 @@ public class HelloWorld {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
-
-        app.get("/courses", ctx -> {
-            var courses = new ArrayList<>(List.of(
+        app.get("/courses/{id}", ctx -> {
+            int id = ctx.pathParamAsClass("id", Integer.class).get();
+            List<Course> courses = new ArrayList<>(List.of(
                     new Course("Java", "Programming on Java"),
                     new Course("PHP", "Программирование на PHP"),
                     new Course("C++", "Программирование на C++")));
-            var header = "Курсы по программированию";
-            var page = new CoursesPage(courses, header);
-            ctx.render("courses/index.jte", model("page", page));
+            String header = "Курсы по программированию";
+            CoursesPage page = new CoursesPage(courses, header);
+            ctx.render("courses/show.jte", model("page", page, "id", id));
         });
+        
         app.get("/hello", ctx -> {
             String name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.result("Hello " + name + "!");
