@@ -8,14 +8,15 @@ import lombok.ToString;
 @Setter
 @ToString
 public final class Course {
-    private Long id;
+    private int id;
 
     @ToString.Include
     private String name;
     private String description;
 
-    public Course(String name, String description) {
+    public Course(int id, String name, String description) {
         this.name = name;
         this.description = description;
+        this.id = id;
     }
 }

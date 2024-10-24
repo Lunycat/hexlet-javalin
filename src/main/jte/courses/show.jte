@@ -1,14 +1,9 @@
-@import org.example.hexlet.dto.courses.CoursesPage
-@param CoursesPage page
-@param int id
+@import org.example.hexlet.dto.courses.CoursePage
+@param CoursePage page
 
-<!-- Для наглядности мы не стали включать сюда основную структуру HTML -->
-<html>
-<head>
-    <meta charset="utf-8"/>
-</head>
-<main>
-    <h1>${page.getCourses().get(id-1).getName()}</h1>
-    <p>${page.getCourses().get(id-1).getDescription()}</p>
-</main>
-</html>
+@template.layout.page(content = @`
+    <p>${page.getCourse().getId()}</p>
+    <p>${page.getCourse().getName()}</p>
+    <p>${page.getCourse().getDescription()}</p>
+    <p><a href="/courses">Вернуться</a></p>
+`)
