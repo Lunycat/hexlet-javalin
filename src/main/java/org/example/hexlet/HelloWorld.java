@@ -40,8 +40,19 @@ public class HelloWorld {
         });
 
         app.get("/courses", ctx -> {
+            String term = ctx.queryParam("term");
             String header = "Курсы по программированию";
-            CoursesPage page = new CoursesPage(COURSES, header);
+            List<Course> courses;
+
+            if (term != null) {
+                courses = COURSES.stream()
+                        .filter(c -> c.getDescription().toLowerCase().contains(term.toLowerCase()))
+                        .toList();
+            } else {
+                courses = COURSES;
+            }
+
+            CoursesPage page = new CoursesPage(courses, header);
             ctx.render("courses/index.jte", model("page", page));
         });
 
