@@ -10,7 +10,9 @@
         <main>
             <h1 class="text-body-emphasis">Привет, Хекслет!</h1>
             <p>Javalin + jte</p>
+            <p><a href="/users/build">Зарегистрировать нового пользователя</a></p>
             <p><a href="/courses">Курсы</a></p>
+            <p><a href="/users">Пользователи</a></p>
         </main>
     </div>
     </body>

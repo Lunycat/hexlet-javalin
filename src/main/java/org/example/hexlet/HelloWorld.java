@@ -5,12 +5,12 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.UserPage;
+import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.repository.UserRepository;
-import org.owasp.html.HtmlPolicyBuilder;
-import org.owasp.html.PolicyFactory;
 import java.util.List;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
@@ -46,6 +46,10 @@ public class HelloWorld {
             ctx.render("courses/index.jte", model("page", page));
         });
 
+        app.get("/courses/build", ctx -> {
+            ctx.render("courses/build.jte");
+        });
+
         app.get("/courses/{id}", ctx -> {
             String term = ctx.queryParam("term");
             long id = ctx.pathParamAsClass("id", Long.class).get();
@@ -59,33 +63,53 @@ public class HelloWorld {
             ctx.render("courses/show.jte", model("page", page));
         });
 
+        app.get("/users", ctx -> {
+            String term = ctx.queryParam("term");
+            List<User> users = UserRepository.search(term);
+            UsersPage page = new UsersPage(users, term);
+            ctx.render("users/index.jte", model("page", page));
+        });
+
+        app.get("/users/build", ctx -> {
+            ctx.render("users/build.jte");
+        });
+
         app.get("/users/{id}", ctx -> {
+            String term = ctx.queryParam("term");
             long id = ctx.pathParamAsClass("id", Long.class).get();
             User user = UserRepository.find(id).orElse(null);
 
             if (user == null) {
-                throw new NotFoundResponse("Пользователь не найден");
+                throw new NotFoundResponse("Курс не найден");
             }
 
-            String html =
-                    "<h1>" + user.getId() + "</h1>" +
-                    "<p>" + user.getName() + "</p>";
-
-            PolicyFactory policy = new HtmlPolicyBuilder()
-                    .allowElements("a")
-                    .allowUrlProtocols("https")
-                    .allowAttributes("href").onElements("a")
-                    .requireRelNofollowOnLinks()
-                    .toFactory();
-
-            String safeHtml = policy.sanitize(html);
-            ctx.contentType("text/html");
-            ctx.result(safeHtml);
+            UserPage page = new UserPage(user, term);
+            ctx.render("users/show.jte", model("page", page));
         });
 
         app.get("/hello", ctx -> {
             String name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.result("Hello " + name + "!");
+        });
+
+        app.post("/users", ctx -> {
+            String name = ctx.formParam("name").trim();
+            String email = ctx.formParam("email").trim().toLowerCase();
+            String password = ctx.formParam("password");
+            String passwordConfirmation = ctx.formParam("passwordConfirmation");
+
+            User user = new User(name, email, password);
+            UserRepository.save(user);
+            ctx.redirect("/users");
+        });
+
+        app.post("/courses", ctx -> {
+            String name = ctx.formParam("name").trim();
+            String description = ctx.formParam("description").trim();
+
+            Course course = new Course(name, description);
+            CourseRepository.save(course);
+            ctx.redirect("/courses");
         });
 
         app.start(7070);

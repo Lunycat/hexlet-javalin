@@ -9,8 +9,10 @@
     <title>Hexlet Javalin Example</title>
 </head>
 <body>
-    <h1>Различные курсы</h1>
+    <h1>Мой сайт</h1>
     <p>
+        <a href="/users/build">Зарегистрировать пользователя</a>
+        <a href="/courses/build">Добавить курс</a>
         <a href="/courses">Курсы</a>
         <a href="/users">Пользователи</a>
     </p>
