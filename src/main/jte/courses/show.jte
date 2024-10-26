@@ -5,5 +5,4 @@
     <p>${page.getCourse().getId()}</p>
     <p>${page.getCourse().getName()}</p>
     <p>${page.getCourse().getDescription()}</p>
-    <p><a href="/courses">Вернуться</a></p>
 `)

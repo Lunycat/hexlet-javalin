@@ -7,5 +7,7 @@ import org.example.hexlet.model.Course;
 @AllArgsConstructor
 @Getter
 public class CoursePage {
+
     private Course course;
+    private String term;
 }

@@ -3,11 +3,13 @@ package org.example.hexlet.dto.users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.hexlet.model.User;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class UserPage {
+public class UsersPage {
 
-    private User user;
+    private List<User> users;
     private String term;
+
 }

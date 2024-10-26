@@ -2,7 +2,16 @@
 @param CoursesPage page
 
 @template.layout.page(content = @`
+    <form action="/courses" method="get">
+        <label>
+            Поиск:
+            <input type="search" required name="term" value="${page.getTerm()}">
+        </label>
+        <input type="submit" value="Искать">
+    </form>
+
     <h1>${page.getHeader()}</h1>
+
     @for(var course : page.getCourses())
         <div>
             <p><a href="/courses/${course.getId()}">${course.getName()}</a></p>

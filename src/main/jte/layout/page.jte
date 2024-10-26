@@ -10,10 +10,10 @@
 </head>
 <body>
     <h1>Различные курсы</h1>
-    <form action="/courses" method="get">
-        <input type="search" required name="term">
-        <input type="submit" value="Искать">
-    </form>
+    <p>
+        <a href="/courses">Курсы</a>
+        <a href="/users">Пользователи</a>
+    </p>
     ${content}
 </body>
 </html>

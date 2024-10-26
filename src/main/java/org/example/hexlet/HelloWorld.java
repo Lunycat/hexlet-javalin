@@ -42,11 +42,12 @@ public class HelloWorld {
             String term = ctx.queryParam("term");
             String header = "Курсы по программированию";
             List<Course> courses = CourseRepository.search(term);
-            CoursesPage page = new CoursesPage(courses, header);
+            CoursesPage page = new CoursesPage(courses, header, term);
             ctx.render("courses/index.jte", model("page", page));
         });
 
         app.get("/courses/{id}", ctx -> {
+            String term = ctx.queryParam("term");
             long id = ctx.pathParamAsClass("id", Long.class).get();
             Course course = CourseRepository.find(id).orElse(null);
 
@@ -54,7 +55,7 @@ public class HelloWorld {
                 throw new NotFoundResponse("Курс не найден");
             }
 
-            CoursePage page = new CoursePage(course);
+            CoursePage page = new CoursePage(course, term);
             ctx.render("courses/show.jte", model("page", page));
         });
 
