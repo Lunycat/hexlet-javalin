@@ -18,7 +18,7 @@ import java.util.List;
 import static io.javalin.rendering.template.TemplateUtil.model;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 
-public class HelloWorld {
+public class App {
 
     static {
         CourseRepository.save(new Course("Java", "Programming on Java"));
@@ -98,10 +98,9 @@ public class HelloWorld {
         });
 
         app.post("/users", ctx -> {
-            String name = capitalize(ctx.formParam("name").trim());
-            String email = ctx.formParam("email").trim().toLowerCase();
-
             try {
+                String name = capitalize(ctx.formParam("name").trim());
+                String email = ctx.formParam("email").trim().toLowerCase();
                 String passwordConfirmation = ctx.formParam("passwordConfirmation");
                 String password = ctx.formParamAsClass("password", String.class)
                         .check(v -> v.equals(passwordConfirmation), "Пароли не совпадают!")
@@ -111,7 +110,10 @@ public class HelloWorld {
                 User user = new User(name, email, password);
                 UserRepository.save(user);
                 ctx.redirect("/users");
+
             } catch (ValidationException e) {
+                String name = ctx.formParam("name");
+                String email = ctx.formParam("email");
                 BuildUserPage page = new BuildUserPage(name, email, e.getErrors());
                 ctx.render("users/build.jte", model("page", page));
             }
@@ -119,21 +121,21 @@ public class HelloWorld {
         });
 
         app.post("/courses", ctx -> {
-            String name = ctx.formParam("name").trim();
-            String description = ctx.formParam("description").trim();
-
             try {
-                name = ctx.formParamAsClass("name", String.class)
+                String name = ctx.formParamAsClass("name", String.class)
                         .check(v -> v.length() > 3, "Короткое название")
                         .get();
-                description = ctx.formParamAsClass("description", String.class)
+                String description = ctx.formParamAsClass("description", String.class)
                         .check(v -> v.length() > 10, "Короткое описание")
                         .get();
 
                 Course course = new Course(name, description);
                 CourseRepository.save(course);
                 ctx.redirect("/courses");
+                
             } catch (ValidationException e) {
+                String name = ctx.formParam("name");
+                String description = ctx.formParam("description");
                 BuildCoursePage page = new BuildCoursePage(capitalize(name), description, e.getErrors());
                 ctx.render("courses/build.jte", model("page", page));
             }
