@@ -3,8 +3,11 @@ package org.example.hexlet;
 import io.javalin.Javalin;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
+import io.javalin.validation.ValidationException;
+import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
+import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.Course;
@@ -12,8 +15,8 @@ import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.repository.UserRepository;
 import java.util.List;
-
 import static io.javalin.rendering.template.TemplateUtil.model;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class HelloWorld {
 
@@ -47,7 +50,8 @@ public class HelloWorld {
         });
 
         app.get("/courses/build", ctx -> {
-            ctx.render("courses/build.jte");
+            BuildCoursePage page = new BuildCoursePage();
+            ctx.render("courses/build.jte", model("page", page));
         });
 
         app.get("/courses/{id}", ctx -> {
@@ -71,7 +75,8 @@ public class HelloWorld {
         });
 
         app.get("/users/build", ctx -> {
-            ctx.render("users/build.jte");
+            BuildUserPage page = new BuildUserPage();
+            ctx.render("users/build.jte", model("page", page));
         });
 
         app.get("/users/{id}", ctx -> {
@@ -93,23 +98,45 @@ public class HelloWorld {
         });
 
         app.post("/users", ctx -> {
-            String name = ctx.formParam("name").trim();
+            String name = capitalize(ctx.formParam("name").trim());
             String email = ctx.formParam("email").trim().toLowerCase();
-            String password = ctx.formParam("password");
-            String passwordConfirmation = ctx.formParam("passwordConfirmation");
 
-            User user = new User(name, email, password);
-            UserRepository.save(user);
-            ctx.redirect("/users");
+            try {
+                String passwordConfirmation = ctx.formParam("passwordConfirmation");
+                String password = ctx.formParamAsClass("password", String.class)
+                        .check(v -> v.equals(passwordConfirmation), "Пароли не совпадают!")
+                        .check(v -> v.length() > 6, "Недостаточная длина пароля!")
+                        .get();
+
+                User user = new User(name, email, password);
+                UserRepository.save(user);
+                ctx.redirect("/users");
+            } catch (ValidationException e) {
+                BuildUserPage page = new BuildUserPage(name, email, e.getErrors());
+                ctx.render("users/build.jte", model("page", page));
+            }
+
         });
 
         app.post("/courses", ctx -> {
             String name = ctx.formParam("name").trim();
             String description = ctx.formParam("description").trim();
 
-            Course course = new Course(name, description);
-            CourseRepository.save(course);
-            ctx.redirect("/courses");
+            try {
+                name = ctx.formParamAsClass("name", String.class)
+                        .check(v -> v.length() > 3, "Короткое название")
+                        .get();
+                description = ctx.formParamAsClass("description", String.class)
+                        .check(v -> v.length() > 10, "Короткое описание")
+                        .get();
+
+                Course course = new Course(name, description);
+                CourseRepository.save(course);
+                ctx.redirect("/courses");
+            } catch (ValidationException e) {
+                BuildCoursePage page = new BuildCoursePage(capitalize(name), description, e.getErrors());
+                ctx.render("courses/build.jte", model("page", page));
+            }
         });
 
         app.start(7070);

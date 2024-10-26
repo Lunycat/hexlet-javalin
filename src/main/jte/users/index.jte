@@ -14,7 +14,7 @@
 
     @for(var user : page.getUsers())
         <div>
-            <p><a href="/users/${user.getId()}">${user.getName()} ${user.getEmail()}</a></p>
+            <p><a href="/users/${user.getId()}">${user.getName()}_${user.getEmail()}</a></p>
         </div>
     @endfor
 `)

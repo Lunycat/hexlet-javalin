@@ -23,7 +23,7 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.7")
     implementation("io.javalin:javalin-rendering:6.1.3")
     implementation("gg.jte:jte:3.1.9")
-    implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1")
+    implementation("org.apache.commons:commons-lang3:3.0")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
