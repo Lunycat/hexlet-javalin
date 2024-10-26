@@ -1,15 +1,23 @@
 package org.example.hexlet.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @ToString
-@AllArgsConstructor
 public class User {
 
-    private int id;
-    private String username;
+    private Long id;
+    private String name;
     private String email;
+    private String password;
+    private LocalDateTime createdAt;
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
