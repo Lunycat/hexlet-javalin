@@ -6,6 +6,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.validation.ValidationException;
 import org.example.hexlet.NamedRoutes;
 import org.example.hexlet.dto.users.BuildUserPage;
+import org.example.hexlet.dto.users.EditUserPage;
 import org.example.hexlet.dto.users.UserPage;
 import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.model.User;
@@ -36,7 +37,7 @@ public class UserController {
         User user = UserRepository.find(id).orElse(null);
 
         if (user == null) {
-            throw new NotFoundResponse("РљСѓСЂСЃ РЅРµ РЅР°Р№РґРµРЅ");
+            throw new NotFoundResponse("Курс не найден");
         }
 
         UserPage page = new UserPage(user, term);
@@ -49,8 +50,8 @@ public class UserController {
             String email = ctx.formParam("email").trim().toLowerCase();
             String passwordConfirmation = ctx.formParam("passwordConfirmation");
             String password = ctx.formParamAsClass("password", String.class)
-                    .check(v -> v.equals(passwordConfirmation), "РџР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚!")
-                    .check(v -> v.length() > 6, "РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅР°СЏ РґР»РёРЅР° РїР°СЂРѕР»СЏ!")
+                    .check(v -> v.equals(passwordConfirmation), "Пароли не совпадают!")
+                    .check(v -> v.length() > 6, "Недостаточная длина пароля!")
                     .get();
 
             User user = new User(name, email, password);
@@ -69,23 +70,29 @@ public class UserController {
         var id = ctx.pathParamAsClass("id", Long.class).get();
         var user = UserRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-        var page = new UserPage(user, null);
+        var page = new EditUserPage(user, null);
         ctx.render("users/edit.jte", model("page", page));
     }
 
     public static void update(Context ctx) {
         var id = ctx.pathParamAsClass("id", Long.class).get();
-
         var name = ctx.formParam("name");
         var email = ctx.formParam("email");
-        var password = ctx.formParam("password");
+        User user = UserRepository.find(id).get();
+        try {
+            var passwordConfirmation = user.getPassword();
+            var password = ctx.formParamAsClass("password", String.class)
+                    .check(v -> v.equals(passwordConfirmation), "Пароли не совпадают!")
+                    .get();
 
-        var user = UserRepository.find(id)
-                .orElseThrow(() -> new NotFoundResponse("Entity with id = " + id + " not found"));
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password);
-        UserRepository.save(user);
-        ctx.redirect(NamedRoutes.usersPath());
+            user.setName(capitalize(name).trim());
+            user.setEmail(email.toLowerCase());
+            UserRepository.update(user);
+            ctx.redirect(NamedRoutes.usersPath());
+
+        } catch (ValidationException e) {
+            var page = new EditUserPage(user, e.getErrors());
+            ctx.render("users/edit.jte", model("page", page));
+        }
     }
 }

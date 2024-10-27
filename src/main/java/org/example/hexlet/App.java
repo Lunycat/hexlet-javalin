@@ -39,7 +39,7 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> ctx.render("index.jte"));
+        app.get("/", ctx -> ctx.render("layout/page.jte"));
 
         app.get(NamedRoutes.coursesPath(), CourseController::index);
         app.get(NamedRoutes.buildCoursePath(), CourseController::build);
@@ -51,7 +51,7 @@ public class App {
         app.get(NamedRoutes.userPath("{id}"), UserController::show);
         app.post(NamedRoutes.usersPath(), UserController::create);
         app.get(NamedRoutes.editUserPath("{id}"), UserController::edit);
-        app.patch(NamedRoutes.userPath("{id}"), UserController::update);
+        app.post(NamedRoutes.userPath("{id}"), UserController::update);
 
         app.get("/hello", ctx -> {
             String name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");

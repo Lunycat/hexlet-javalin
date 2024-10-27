@@ -1,8 +1,7 @@
-@import org.example.hexlet.dto.users.BuildUserPage
+@import org.example.hexlet.dto.users.EditUserPage
 @import org.example.hexlet.NamedRoutes
 
-@param BuildUserPage page
-
+@param EditUserPage page
 
 @template.layout.page(content = @`
     @if(page.getErrors() != null)
@@ -15,17 +14,17 @@
         </ul>
     @endif
 
-    <form action="${NamedRoutes.userPath(us)}" method="post">
+    <form action="${NamedRoutes.userPath(page.getUser().getId())}" method="post">
         <div>
             <label>
                 Имя
-                <input type="text" required name="name" value="${page.getName()}"/>
+                <input type="text" required name="name" value="${page.getUser().getName()}"/>
             </label>
         </div>
         <div>
             <label>
                 Email
-                <input type="email" required name="email" value="${page.getEmail()}"/>
+                <input type="email" required name="email" value="${page.getUser().getEmail()}"/>
             </label>
         </div>
         <div>
@@ -34,12 +33,6 @@
                 <input type="password" required name="password"/>
             </label>
         </div>
-        <div>
-            <label>
-                Подтверждение пароля
-                <input type="password" required name="passwordConfirmation"/>
-            </label>
-        </div>
-        <input type="submit" value="Зарегистрировать"/>
+        <input type="submit" value="Сохранить изменения"/>
     </form>
 `)

@@ -38,4 +38,8 @@ public class UserRepository {
                 .filter(u -> u.getName().toLowerCase().startsWith(term.toLowerCase()))
                 .toList();
     }
+
+    public static void update(User user) {
+        entities.set(entities.indexOf(user), user);
+    }
 }
