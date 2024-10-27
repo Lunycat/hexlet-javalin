@@ -3,6 +3,7 @@
 
 @param BuildUserPage page
 
+
 @template.layout.page(content = @`
     @if(page.getErrors() != null)
         <ul>
@@ -14,7 +15,7 @@
         </ul>
     @endif
 
-    <form action="${NamedRoutes.usersPath()}" method="post">
+    <form action="${NamedRoutes.userPath(us)}" method="post">
         <div>
             <label>
                 Имя

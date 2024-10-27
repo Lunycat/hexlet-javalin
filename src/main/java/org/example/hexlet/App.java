@@ -4,6 +4,8 @@ import io.javalin.Javalin;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
+import org.example.hexlet.controller.CourseController;
+import org.example.hexlet.controller.UserController;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -37,104 +39,19 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> {
-            ctx.render("index.jte");
-        });
+        app.get("/", ctx -> ctx.render("index.jte"));
 
-        app.get(NamedRoutes.coursesPath(), ctx -> {
-            String term = ctx.queryParam("term");
-            String header = "Курсы по программированию";
-            List<Course> courses = CourseRepository.search(term);
-            CoursesPage page = new CoursesPage(courses, header, term);
-            ctx.render("courses/index.jte", model("page", page));
-        });
+        app.get(NamedRoutes.coursesPath(), CourseController::index);
+        app.get(NamedRoutes.buildCoursePath(), CourseController::build);
+        app.get(NamedRoutes.coursePath("{id}"), CourseController::show);
+        app.post(NamedRoutes.coursesPath(), CourseController::create);
 
-        app.get(NamedRoutes.buildCoursePath(), ctx -> {
-            BuildCoursePage page = new BuildCoursePage();
-            ctx.render("courses/build.jte", model("page", page));
-        });
-
-        app.get(NamedRoutes.coursePath("{id}"), ctx -> {
-            String term = ctx.queryParam("term");
-            long id = ctx.pathParamAsClass("id", Long.class).get();
-            Course course = CourseRepository.find(id).orElse(null);
-
-            if (course == null) {
-                throw new NotFoundResponse("Курс не найден");
-            }
-
-            CoursePage page = new CoursePage(course, term);
-            ctx.render("courses/show.jte", model("page", page));
-        });
-
-        app.get(NamedRoutes.usersPath(), ctx -> {
-            String term = ctx.queryParam("term");
-            List<User> users = UserRepository.search(term);
-            UsersPage page = new UsersPage(users, term);
-            ctx.render("users/index.jte", model("page", page));
-        });
-
-        app.get(NamedRoutes.buildUserPath(), ctx -> {
-            BuildUserPage page = new BuildUserPage();
-            ctx.render("users/build.jte", model("page", page));
-        });
-
-        app.get(NamedRoutes.userPath("{id}"), ctx -> {
-            String term = ctx.queryParam("term");
-            long id = ctx.pathParamAsClass("id", Long.class).get();
-            User user = UserRepository.find(id).orElse(null);
-
-            if (user == null) {
-                throw new NotFoundResponse("Курс не найден");
-            }
-
-            UserPage page = new UserPage(user, term);
-            ctx.render("users/show.jte", model("page", page));
-        });
-
-        app.post(NamedRoutes.usersPath(), ctx -> {
-            try {
-                String name = capitalize(ctx.formParam("name").trim());
-                String email = ctx.formParam("email").trim().toLowerCase();
-                String passwordConfirmation = ctx.formParam("passwordConfirmation");
-                String password = ctx.formParamAsClass("password", String.class)
-                        .check(v -> v.equals(passwordConfirmation), "Пароли не совпадают!")
-                        .check(v -> v.length() > 6, "Недостаточная длина пароля!")
-                        .get();
-
-                User user = new User(name, email, password);
-                UserRepository.save(user);
-                ctx.redirect(NamedRoutes.usersPath());
-
-            } catch (ValidationException e) {
-                String name = ctx.formParam("name");
-                String email = ctx.formParam("email");
-                BuildUserPage page = new BuildUserPage(name, email, e.getErrors());
-                ctx.render("users/build.jte", model("page", page));
-            }
-
-        });
-
-        app.post(NamedRoutes.coursesPath(), ctx -> {
-            try {
-                String name = ctx.formParamAsClass("name", String.class)
-                        .check(v -> v.length() > 3, "Короткое название")
-                        .get();
-                String description = ctx.formParamAsClass("description", String.class)
-                        .check(v -> v.length() > 10, "Короткое описание")
-                        .get();
-
-                Course course = new Course(name, description);
-                CourseRepository.save(course);
-                ctx.redirect(NamedRoutes.coursesPath());
-                
-            } catch (ValidationException e) {
-                String name = ctx.formParam("name");
-                String description = ctx.formParam("description");
-                BuildCoursePage page = new BuildCoursePage(capitalize(name), description, e.getErrors());
-                ctx.render("courses/build.jte", model("page", page));
-            }
-        });
+        app.get(NamedRoutes.usersPath(), UserController::index);
+        app.get(NamedRoutes.buildUserPath(), UserController::build);
+        app.get(NamedRoutes.userPath("{id}"), UserController::show);
+        app.post(NamedRoutes.usersPath(), UserController::create);
+        app.get(NamedRoutes.editUserPath("{id}"), UserController::edit);
+        app.patch(NamedRoutes.userPath("{id}"), UserController::update);
 
         app.get("/hello", ctx -> {
             String name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");

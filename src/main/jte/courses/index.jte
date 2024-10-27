@@ -12,7 +12,7 @@
         <input type="submit" value="Искать">
     </form>
 
-    <h1>${page.getHeader()}</h1>
+    <h1>Курсы</h1>
 
     @for(var course : page.getCourses())
         <div>

@@ -10,6 +10,9 @@ public class NamedRoutes {
         return "users/build";
     }
 
+    public static String editUserPath(String id) {
+        return "/users/" + id + "/edit";
+    }
 
     public static String userPath(String id) {
         return "/users/" + id;
