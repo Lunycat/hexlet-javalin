@@ -41,7 +41,7 @@ public class App {
             ctx.render("index.jte");
         });
 
-        app.get("/courses", ctx -> {
+        app.get(NamedRoutes.coursesPath(), ctx -> {
             String term = ctx.queryParam("term");
             String header = "Курсы по программированию";
             List<Course> courses = CourseRepository.search(term);
@@ -49,12 +49,12 @@ public class App {
             ctx.render("courses/index.jte", model("page", page));
         });
 
-        app.get("/courses/build", ctx -> {
+        app.get(NamedRoutes.buildCoursePath(), ctx -> {
             BuildCoursePage page = new BuildCoursePage();
             ctx.render("courses/build.jte", model("page", page));
         });
 
-        app.get("/courses/{id}", ctx -> {
+        app.get(NamedRoutes.coursePath("{id}"), ctx -> {
             String term = ctx.queryParam("term");
             long id = ctx.pathParamAsClass("id", Long.class).get();
             Course course = CourseRepository.find(id).orElse(null);
@@ -67,19 +67,19 @@ public class App {
             ctx.render("courses/show.jte", model("page", page));
         });
 
-        app.get("/users", ctx -> {
+        app.get(NamedRoutes.usersPath(), ctx -> {
             String term = ctx.queryParam("term");
             List<User> users = UserRepository.search(term);
             UsersPage page = new UsersPage(users, term);
             ctx.render("users/index.jte", model("page", page));
         });
 
-        app.get("/users/build", ctx -> {
+        app.get(NamedRoutes.buildUserPath(), ctx -> {
             BuildUserPage page = new BuildUserPage();
             ctx.render("users/build.jte", model("page", page));
         });
 
-        app.get("/users/{id}", ctx -> {
+        app.get(NamedRoutes.userPath("{id}"), ctx -> {
             String term = ctx.queryParam("term");
             long id = ctx.pathParamAsClass("id", Long.class).get();
             User user = UserRepository.find(id).orElse(null);
@@ -92,12 +92,7 @@ public class App {
             ctx.render("users/show.jte", model("page", page));
         });
 
-        app.get("/hello", ctx -> {
-            String name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
-            ctx.result("Hello " + name + "!");
-        });
-
-        app.post("/users", ctx -> {
+        app.post(NamedRoutes.usersPath(), ctx -> {
             try {
                 String name = capitalize(ctx.formParam("name").trim());
                 String email = ctx.formParam("email").trim().toLowerCase();
@@ -109,7 +104,7 @@ public class App {
 
                 User user = new User(name, email, password);
                 UserRepository.save(user);
-                ctx.redirect("/users");
+                ctx.redirect(NamedRoutes.usersPath());
 
             } catch (ValidationException e) {
                 String name = ctx.formParam("name");
@@ -120,7 +115,7 @@ public class App {
 
         });
 
-        app.post("/courses", ctx -> {
+        app.post(NamedRoutes.coursesPath(), ctx -> {
             try {
                 String name = ctx.formParamAsClass("name", String.class)
                         .check(v -> v.length() > 3, "Короткое название")
@@ -131,7 +126,7 @@ public class App {
 
                 Course course = new Course(name, description);
                 CourseRepository.save(course);
-                ctx.redirect("/courses");
+                ctx.redirect(NamedRoutes.coursesPath());
                 
             } catch (ValidationException e) {
                 String name = ctx.formParam("name");
@@ -139,6 +134,11 @@ public class App {
                 BuildCoursePage page = new BuildCoursePage(capitalize(name), description, e.getErrors());
                 ctx.render("courses/build.jte", model("page", page));
             }
+        });
+
+        app.get("/hello", ctx -> {
+            String name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
+            ctx.result("Hello " + name + "!");
         });
 
         app.start(7070);

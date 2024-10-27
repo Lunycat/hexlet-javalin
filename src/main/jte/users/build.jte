@@ -1,4 +1,6 @@
 @import org.example.hexlet.dto.users.BuildUserPage
+@import org.example.hexlet.NamedRoutes
+
 @param BuildUserPage page
 
 <!doctype html>
@@ -21,7 +23,7 @@
         </ul>
     @endif
 
-    <form action="/users" method="post">
+    <form action="${NamedRoutes.usersPath()}" method="post">
         <div>
             <label>
                 Имя
@@ -37,16 +39,16 @@
         <div>
             <label>
                 Пароль
-                <input type="password" required name="password" />
+                <input type="password" required name="password"/>
             </label>
         </div>
         <div>
             <label>
                 Подтверждение пароля
-                <input type="password" required name="passwordConfirmation" />
+                <input type="password" required name="passwordConfirmation"/>
             </label>
         </div>
-        <input type="submit" value="Зарегистрировать" />
+        <input type="submit" value="Зарегистрировать"/>
     </form>
 </body>
 </html>
