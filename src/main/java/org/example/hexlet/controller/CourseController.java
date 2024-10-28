@@ -33,11 +33,7 @@ public class CourseController {
     public static void show(Context ctx) {
         String term = ctx.queryParam("term");
         long id = ctx.pathParamAsClass("id", Long.class).get();
-        Course course = CourseRepository.find(id).orElse(null);
-
-        if (course == null) {
-            throw new NotFoundResponse("Курс не найден");
-        }
+        Course course = CourseRepository.find(id).orElseThrow(() -> new NotFoundResponse("Курс не найден"));
 
         CoursePage page = new CoursePage(course, term);
         ctx.render("courses/show.jte", model("page", page));

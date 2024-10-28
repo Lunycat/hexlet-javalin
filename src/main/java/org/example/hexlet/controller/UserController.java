@@ -34,11 +34,7 @@ public class UserController {
     public static void show(Context ctx) {
         String term = ctx.queryParam("term");
         long id = ctx.pathParamAsClass("id", Long.class).get();
-        User user = UserRepository.find(id).orElse(null);
-
-        if (user == null) {
-            throw new NotFoundResponse(" урс не найден");
-        }
+        User user = UserRepository.find(id).orElseThrow(() -> new NotFoundResponse(" урс не найден"));
 
         UserPage page = new UserPage(user, term);
         ctx.render("users/show.jte", model("page", page));
