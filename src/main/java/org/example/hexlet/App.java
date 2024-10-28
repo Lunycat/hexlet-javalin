@@ -1,24 +1,15 @@
 package org.example.hexlet;
 
 import io.javalin.Javalin;
-import io.javalin.http.NotFoundResponse;
 import io.javalin.rendering.template.JavalinJte;
-import io.javalin.validation.ValidationException;
 import org.example.hexlet.controller.CourseController;
 import org.example.hexlet.controller.UserController;
-import org.example.hexlet.dto.courses.BuildCoursePage;
-import org.example.hexlet.dto.courses.CoursePage;
-import org.example.hexlet.dto.courses.CoursesPage;
-import org.example.hexlet.dto.users.BuildUserPage;
-import org.example.hexlet.dto.users.UserPage;
-import org.example.hexlet.dto.users.UsersPage;
+import org.example.hexlet.dto.MainPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.repository.UserRepository;
-import java.util.List;
 import static io.javalin.rendering.template.TemplateUtil.model;
-import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class App {
 
@@ -39,7 +30,12 @@ public class App {
             config.fileRenderer(new JavalinJte());
         });
 
-        app.get("/", ctx -> ctx.render("layout/page.jte"));
+        app.get("/", ctx -> {
+            var visited = Boolean.valueOf(ctx.cookie("visited"));
+            MainPage page = new MainPage(visited);
+            ctx.render("index.jte", model("page", page));
+            ctx.cookie("visited", String.valueOf(true));
+        });
 
         app.get(NamedRoutes.coursesPath(), CourseController::index);
         app.get(NamedRoutes.buildCoursePath(), CourseController::build);

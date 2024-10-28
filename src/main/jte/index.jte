@@ -1,3 +1,6 @@
+@import org.example.hexlet.dto.MainPage
+@param MainPage page
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -15,5 +18,10 @@
             <p><a href="/users">Пользователи</a></p>
         </main>
     </div>
+    @if(!page.isVisited())
+        <div class="col-lg-8 mx-auto p-4 py-md-5">
+            <p>Это сообщение будет показано 1 раз</p>
+        </div>
+    @endif
     </body>
 </html>
