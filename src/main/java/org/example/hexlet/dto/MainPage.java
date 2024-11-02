@@ -3,9 +3,8 @@ package org.example.hexlet.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
+@Getter
 public class MainPage {
-
-    private boolean isVisited;
+    private String currentUser;
 }
