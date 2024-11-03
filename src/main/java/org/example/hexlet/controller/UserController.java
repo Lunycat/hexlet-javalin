@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 
 import io.javalin.http.NotFoundResponse;
 import io.javalin.validation.ValidationException;
-import org.example.hexlet.NamedRoutes;
+import org.example.hexlet.util.NamedRoutes;
 import org.example.hexlet.dto.users.BuildUserPage;
 import org.example.hexlet.dto.users.EditUserPage;
 import org.example.hexlet.dto.users.UserPage;
@@ -21,13 +21,16 @@ public class UserController {
 
     public static void index(Context ctx) {
         String term = ctx.queryParam("term");
+        String flash = ctx.consumeSessionAttribute("flash");
         List<User> users = UserRepository.search(term);
         UsersPage page = new UsersPage(users, term);
+        page.setFlash(flash);
         ctx.render("users/index.jte", model("page", page));
     }
 
     public static void build(Context ctx) {
         BuildUserPage page = new BuildUserPage();
+
         ctx.render("users/build.jte", model("page", page));
     }
 
@@ -52,12 +55,17 @@ public class UserController {
 
             User user = new User(name, email, password);
             UserRepository.save(user);
+            ctx.sessionAttribute("flash", "User has been created!");
             ctx.redirect(NamedRoutes.usersPath());
 
         } catch (ValidationException e) {
             String name = ctx.formParam("name");
             String email = ctx.formParam("email");
+            ctx.sessionAttribute("flash", "User not created!");
+            String flash = ctx.consumeSessionAttribute("flash");
+
             BuildUserPage page = new BuildUserPage(name, email, e.getErrors());
+            page.setFlash(flash);
             ctx.render("users/build.jte", model("page", page));
         }
     }

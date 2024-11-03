@@ -3,7 +3,7 @@ package org.example.hexlet.controller;
 import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.validation.ValidationException;
-import org.example.hexlet.NamedRoutes;
+import org.example.hexlet.util.NamedRoutes;
 import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.dto.courses.CoursePage;
 import org.example.hexlet.dto.courses.CoursesPage;
@@ -22,6 +22,7 @@ public class CourseController {
         String header = "Курсы по программированию";
         List<Course> courses = CourseRepository.search(term);
         CoursesPage page = new CoursesPage(courses, header, term);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("courses/index.jte", model("page", page));
     }
 
@@ -50,12 +51,15 @@ public class CourseController {
 
             Course course = new Course(name, description);
             CourseRepository.save(course);
+            ctx.sessionAttribute("flash", "Course has been created!");
             ctx.redirect(NamedRoutes.coursesPath());
 
         } catch (ValidationException e) {
             String name = ctx.formParam("name");
             String description = ctx.formParam("description");
+            ctx.sessionAttribute("flash", "Course not created!");
             BuildCoursePage page = new BuildCoursePage(capitalize(name), description, e.getErrors());
+            page.setFlash(ctx.consumeSessionAttribute("flash"));
             ctx.render("courses/build.jte", model("page", page));
         }
     }

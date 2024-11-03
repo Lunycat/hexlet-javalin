@@ -1,9 +1,15 @@
 @import org.example.hexlet.dto.users.BuildUserPage
-@import org.example.hexlet.NamedRoutes
+@import org.example.hexlet.util.NamedRoutes
 
 @param BuildUserPage page
 
 @template.layout.page(content = @`
+    @if(page.getFlash() != null)
+        <div class="alert alert-danger" role="alert">
+            ${page.getFlash()}
+        </div>
+    @endif
+
     @if(page.getErrors() != null)
         <ul>
             @for(var validator : page.getErrors().values())

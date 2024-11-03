@@ -1,5 +1,5 @@
 @import org.example.hexlet.dto.users.UsersPage
-@import org.example.hexlet.NamedRoutes
+@import org.example.hexlet.util.NamedRoutes
 
 @param UsersPage page
 
@@ -12,6 +12,11 @@
         <input type="submit" value="Искать">
     </form>
 
+    @if(page.getFlash() != null)
+        <div class="alert alert-success" role="alert">
+            ${page.getFlash()}
+        </div>
+    @endif
     <h1>Пользователи</h1>
 
     @for(var user : page.getUsers())

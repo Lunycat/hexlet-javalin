@@ -1,5 +1,5 @@
 @import org.example.hexlet.dto.courses.CoursesPage
-@import org.example.hexlet.NamedRoutes
+@import org.example.hexlet.util.NamedRoutes
 
 @param CoursesPage page
 
@@ -12,6 +12,11 @@
         <input type="submit" value="Искать">
     </form>
 
+    @if(page.getFlash() != null)
+        <div class="alert alert-success" role="alert">
+            ${page.getFlash()}
+        </div>
+    @endif
     <h1>Курсы</h1>
 
     @for(var course : page.getCourses())

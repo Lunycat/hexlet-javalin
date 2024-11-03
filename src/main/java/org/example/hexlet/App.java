@@ -10,6 +10,8 @@ import org.example.hexlet.model.Course;
 import org.example.hexlet.model.User;
 import org.example.hexlet.repository.CourseRepository;
 import org.example.hexlet.repository.UserRepository;
+import org.example.hexlet.util.NamedRoutes;
+
 import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class App {
