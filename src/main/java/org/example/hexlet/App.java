@@ -28,15 +28,9 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class App {
 
-    static {
-        UserRepository.save(new User("4el1235", "evdeev@mail.ru", "dsadsad"));
-        UserRepository.save(new User("egor", "egor242@mail.ru", "dasdsa"));
-        UserRepository.save(new User("Valentin", "sigmaboy@gmail.ru", "hghgfbdvxc"));
-    }
-
     private static Javalin getApp() throws SQLException {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig .setJdbcUrl("jdbc:h2:mem:hexlet_project;DB_CLOSE_DELAY=-1;");
+        hikariConfig.setJdbcUrl("jdbc:h2:mem:hexlet_project;DB_CLOSE_DELAY=-1;");
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
