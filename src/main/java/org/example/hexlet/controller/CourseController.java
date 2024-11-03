@@ -10,6 +10,7 @@ import org.example.hexlet.dto.courses.CoursesPage;
 import org.example.hexlet.model.Course;
 import org.example.hexlet.repository.CourseRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
@@ -17,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class CourseController {
 
-    public static void index(Context ctx) {
+    public static void index(Context ctx) throws SQLException {
         String term = ctx.queryParam("term");
         String header = "Курсы по программированию";
         List<Course> courses = CourseRepository.search(term);
@@ -32,17 +33,18 @@ public class CourseController {
         ctx.render("courses/build.jte", model("page", page));
     }
 
-    public static void show(Context ctx) {
+    public static void show(Context ctx) throws SQLException {
         String term = ctx.queryParam("term");
         long id = ctx.pathParamAsClass("id", Long.class).get();
-        Course course = CourseRepository.find(id).orElseThrow(() -> new NotFoundResponse("Курс не найден"));
+        Course course = CourseRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Курс не найден"));
 
         CoursePage page = new CoursePage(course);
         page.setTerm(term);
         ctx.render("courses/show.jte", model("page", page));
     }
 
-    public static void create(Context ctx) {
+    public static void create(Context ctx) throws SQLException {
         try {
             String name = ctx.formParamAsClass("name", String.class)
                     .check(v -> v.length() > 3, "Короткое название")

@@ -7,7 +7,7 @@
     <form action="/users" method="get">
         <label>
             Поиск:
-            <input type="search" required name="term" value="${page.getTerm()}">
+            <input type="search" name="term" value="${page.getTerm()}">
         </label>
         <input type="submit" value="Искать">
     </form>

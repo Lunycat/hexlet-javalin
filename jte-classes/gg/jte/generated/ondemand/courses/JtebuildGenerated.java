@@ -1,10 +1,10 @@
-package gg.jte.generated.ondemand.cars;
-import org.example.hexlet.dto.cars.BuildCarPage;
+package gg.jte.generated.ondemand.courses;
+import org.example.hexlet.dto.courses.BuildCoursePage;
 import org.example.hexlet.util.NamedRoutes;
 public final class JtebuildGenerated {
-	public static final String JTE_NAME = "cars/build.jte";
+	public static final String JTE_NAME = "courses/build.jte";
 	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,5,5,5,5,6,6,8,8,8,10,10,12,12,14,14,15,15,16,16,16,17,17,18,18,20,20,22,22,22,22,22,22,22,22,22,26,26,26,26,26,26,26,26,26,32,32,32,32,32,32,32,32,32,37,37,37,37,37,3,3,3,3};
-	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, BuildCarPage page) {
+	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, BuildCoursePage page) {
 		jteOutput.writeContent("\r\n");
 		gg.jte.generated.ondemand.layout.JtepageGenerated.render(jteOutput, jteHtmlInterceptor, new gg.jte.html.HtmlContent() {
 			public void writeTo(gg.jte.html.HtmlTemplateOutput jteOutput) {
@@ -31,7 +31,7 @@ public final class JtebuildGenerated {
 					jteOutput.writeContent("\r\n        </ul>\r\n    ");
 				}
 				jteOutput.writeContent("\r\n\r\n    <form");
-				var __jte_html_attribute_0 = NamedRoutes.carsPath();
+				var __jte_html_attribute_0 = NamedRoutes.coursesPath();
 				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_0)) {
 					jteOutput.writeContent(" action=\"");
 					jteOutput.setContext("form", "action");
@@ -39,8 +39,8 @@ public final class JtebuildGenerated {
 					jteOutput.setContext("form", null);
 					jteOutput.writeContent("\"");
 				}
-				jteOutput.writeContent(" method=\"post\">\r\n        <div>\r\n            <label>\r\n                Название марки\r\n                <input type=\"text\" required name=\"make\"");
-				var __jte_html_attribute_1 = page.getMake();
+				jteOutput.writeContent(" method=\"post\">\r\n        <div>\r\n            <label>\r\n                Название курса\r\n                <input type=\"text\" required name=\"name\"");
+				var __jte_html_attribute_1 = page.getName();
 				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_1)) {
 					jteOutput.writeContent(" value=\"");
 					jteOutput.setContext("input", "value");
@@ -48,8 +48,8 @@ public final class JtebuildGenerated {
 					jteOutput.setContext("input", null);
 					jteOutput.writeContent("\"");
 				}
-				jteOutput.writeContent(">\r\n            </label>\r\n        </div>\r\n        <div>\r\n            <label>\r\n                Название модели\r\n                <input type=\"text\" required name=\"model\"");
-				var __jte_html_attribute_2 = page.getModel();
+				jteOutput.writeContent(">\r\n            </label>\r\n        </div>\r\n        <div>\r\n            <label>\r\n                Описание курса\r\n                <input type=\"text\" required name=\"description\"");
+				var __jte_html_attribute_2 = page.getDescription();
 				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_2)) {
 					jteOutput.writeContent(" value=\"");
 					jteOutput.setContext("input", "value");
@@ -57,12 +57,12 @@ public final class JtebuildGenerated {
 					jteOutput.setContext("input", null);
 					jteOutput.writeContent("\"");
 				}
-				jteOutput.writeContent(">\r\n            </label>\r\n        </div>\r\n        <input type=\"submit\" value=\"Добавить машину\">\r\n    </form>\r\n");
+				jteOutput.writeContent(">\r\n            </label>\r\n        </div>\r\n        <input type=\"submit\" value=\"Добавить курс\">\r\n    </form>\r\n");
 			}
 		}, null);
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
-		BuildCarPage page = (BuildCarPage)params.get("page");
+		BuildCoursePage page = (BuildCoursePage)params.get("page");
 		render(jteOutput, jteHtmlInterceptor, page);
 	}
 }

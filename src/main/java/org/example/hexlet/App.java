@@ -29,10 +29,6 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 public class App {
 
     static {
-        CourseRepository.save(new Course("Java", "Programming on Java"));
-        CourseRepository.save(new Course("PHP", "Программирование на PHP"));
-        CourseRepository.save(new Course( "C++", "Программирование на C++"));
-
         UserRepository.save(new User("4el1235", "evdeev@mail.ru", "dsadsad"));
         UserRepository.save(new User("egor", "egor242@mail.ru", "dasdsa"));
         UserRepository.save(new User("Valentin", "sigmaboy@gmail.ru", "hghgfbdvxc"));
