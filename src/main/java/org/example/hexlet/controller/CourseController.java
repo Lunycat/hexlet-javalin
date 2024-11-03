@@ -21,7 +21,8 @@ public class CourseController {
         String term = ctx.queryParam("term");
         String header = "Курсы по программированию";
         List<Course> courses = CourseRepository.search(term);
-        CoursesPage page = new CoursesPage(courses, header, term);
+        CoursesPage page = new CoursesPage(courses, header);
+        page.setTerm(term);
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         ctx.render("courses/index.jte", model("page", page));
     }
@@ -36,7 +37,8 @@ public class CourseController {
         long id = ctx.pathParamAsClass("id", Long.class).get();
         Course course = CourseRepository.find(id).orElseThrow(() -> new NotFoundResponse("Курс не найден"));
 
-        CoursePage page = new CoursePage(course, term);
+        CoursePage page = new CoursePage(course);
+        page.setTerm(term);
         ctx.render("courses/show.jte", model("page", page));
     }
 

@@ -23,23 +23,22 @@ public class UserController {
         String term = ctx.queryParam("term");
         String flash = ctx.consumeSessionAttribute("flash");
         List<User> users = UserRepository.search(term);
-        UsersPage page = new UsersPage(users, term);
+        UsersPage page = new UsersPage(users);
+        page.setTerm(term);
         page.setFlash(flash);
         ctx.render("users/index.jte", model("page", page));
     }
 
     public static void build(Context ctx) {
         BuildUserPage page = new BuildUserPage();
-
         ctx.render("users/build.jte", model("page", page));
     }
 
     public static void show(Context ctx) {
-        String term = ctx.queryParam("term");
         long id = ctx.pathParamAsClass("id", Long.class).get();
         User user = UserRepository.find(id).orElseThrow(() -> new NotFoundResponse(" урс не найден"));
 
-        UserPage page = new UserPage(user, term);
+        UserPage page = new UserPage(user);
         ctx.render("users/show.jte", model("page", page));
     }
 
