@@ -25,4 +25,6 @@
             <p>${car.getModel()}</p>
         </div>
     @endfor
+
+    <a href="${NamedRoutes.buildCarPath()}" class="btn btn-primary" role="button" data-bs-toggle="button">Добавить машину</a>
 `)

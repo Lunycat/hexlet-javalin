@@ -24,4 +24,6 @@
             <p><a href="${NamedRoutes.userPath(user.getId())}">${user.getName()}_${user.getEmail()}</a></p>
         </div>
     @endfor
+
+    <a href="${NamedRoutes.buildUserPath()}" class="btn btn-primary" role="button" data-bs-toggle="button">Добавить пользователя</a>
 `)

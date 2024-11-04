@@ -5,10 +5,11 @@ plugins {
     id("java")
     application
     id("io.freefair.lombok") version "8.10"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 application {
-    mainClass.set("org.example.hexlet.HelloWorld")
+    mainClass.set("org.example.hexlet.App")
 }
 
 group = "org.example"

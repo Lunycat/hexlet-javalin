@@ -25,4 +25,6 @@
             <p>${course.getDescription()}</p>
         </div>
     @endfor
+
+    <a href="${NamedRoutes.buildCoursePath()}" class="btn btn-primary" role="button" data-bs-toggle="button">Добавить курс</a>
 `)

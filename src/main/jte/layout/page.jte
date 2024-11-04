@@ -17,6 +17,29 @@
     <title>Hexlet Javalin Example</title>
 </head>
 <body>
+<nav class="navbar-expand-lg navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Мой сайт</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="${NamedRoutes.coursesPath()}">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${NamedRoutes.usersPath()}">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${NamedRoutes.carsPath()}">Cars</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+      </span>
+        </div>
+    </div>
+</nav>
 @if(page != null && page.getFlash() != null)
     <p>${page.getFlash()}</p>
 @endif

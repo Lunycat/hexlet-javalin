@@ -3,7 +3,7 @@ import org.example.hexlet.dto.users.UsersPage;
 import org.example.hexlet.util.NamedRoutes;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "users/index.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,5,5,5,5,9,9,9,9,9,9,9,9,9,14,14,16,16,16,18,18,21,21,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,25,25,26,26,26,27,27,27,3,3,3,3};
+	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,5,5,5,5,9,9,9,9,9,9,9,9,9,14,14,16,16,16,18,18,21,21,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,25,25,27,27,27,27,27,27,27,27,27,28,28,28,29,29,29,3,3,3,3};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, UsersPage page) {
 		jteOutput.writeContent("\r\n");
 		gg.jte.generated.ondemand.layout.JtepageGenerated.render(jteOutput, jteHtmlInterceptor, new gg.jte.html.HtmlContent() {
@@ -43,7 +43,16 @@ public final class JteindexGenerated {
 					jteOutput.writeUserContent(user.getEmail());
 					jteOutput.writeContent("</a></p>\r\n        </div>\r\n    ");
 				}
-				jteOutput.writeContent("\r\n");
+				jteOutput.writeContent("\r\n\r\n    <a");
+				var __jte_html_attribute_2 = NamedRoutes.buildUserPath();
+				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_2)) {
+					jteOutput.writeContent(" href=\"");
+					jteOutput.setContext("a", "href");
+					jteOutput.writeUserContent(__jte_html_attribute_2);
+					jteOutput.setContext("a", null);
+					jteOutput.writeContent("\"");
+				}
+				jteOutput.writeContent(" class=\"btn btn-primary\" role=\"button\" data-bs-toggle=\"button\">Добавить пользователя</a>\r\n");
 			}
 		}, null);
 		jteOutput.writeContent("\r\n");
