@@ -1,10 +1,8 @@
-FROM eclipse-temurin:20-jdk
-
-ARG GRADLE_VERSION=8.2
+FROM gradle:8.4.0-jdk21
 
 WORKDIR /hexlet-javalin
 
-COPY /hexlet-javalin .
+COPY . .
 
 RUN gradle installDist
 
